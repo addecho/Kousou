@@ -1,0 +1,23 @@
+{
+  "name": "@kousou/web",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@kousou/core": "workspace:*",
+    "@kousou/contracts": "workspace:*",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0",
+    "@tanstack/vue-query": "^5.90.0",
+    "naive-ui": "^2.43.0",
+    "lucide-vue-next": "^0.468.0"
+  },
+  "devDependencies": {
+    "vite": "^6.3.0",
+    "@vitejs/plugin-vue": "^5.2.0",
+    "vue-tsc": "^3.0.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@kousou/server",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "@kousou/core": "workspace:*",
+    "@kousou/contracts": "workspace:*",
+    "zod": "^3.25.0",
+    "fastify": "^5.6.0",
+    "@fastify/cookie": "^11.0.0",
+    "@fastify/static": "^8.3.0",
+    "@fastify/rate-limit": "^10.3.0",
+    "postgres": "^3.4.7",
+    "drizzle-orm": "^0.44.0",
+    "dotenv": "^17.0.0"
+  }
+}

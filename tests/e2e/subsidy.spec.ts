@@ -1,0 +1,31 @@
+import { test, expect } from "@playwright/test";
+
+test("manual subsidy edits persist and agree with server pricing", async ({ page }) => {
+  await page.request.post("/api/v1/workspaces", { data: {} });
+  const p = await (await page.request.post("/api/v1/plans", { data: { example: true } })).json();
+  await page.goto(`/?plan=${p.id}`);
+  await page.getByRole("button", { name: "棉质短袖 T 恤", exact: true }).click();
+  await page.getByRole("checkbox", { name: "适用国补（手动）", exact: true }).check();
+  await page.getByRole("textbox", { name: /补贴比例/ }).fill("20");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: "test-results/subsidy-mobile.png", fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.getByRole("button", { name: "保存商品", exact: true }).click();
+  await expect(page.locator(".save-indicator")).toHaveText("已保存");
+  await page.reload();
+  await page.getByRole("button", { name: "结算", exact: true }).click();
+  await expect(page.getByText("国补（手动模拟）", { exact: true })).toBeVisible();
+  const saved = await (await page.request.get(`/api/v1/plans/${p.id}`)).json();
+  expect(saved.document.lines[0].governmentSubsidy.rateBps).toBe(2000);
+  const r = await (await page.request.post("/api/v1/pricing/calculate", { data: saved.document })).json();
+  expect(BigInt(r.governmentSubsidy)).toBeGreaterThan(0n);
+  await expect(page.locator(".total")).toContainText((Number(r.cash) / 100).toFixed(2));
+  await page.getByRole("button", { name: "保存快照", exact: true }).click();
+  await expect(page.locator(".toast")).toContainText("快照");
+  await page.getByRole("button", { name: "商品", exact: true }).click();
+  await page.getByRole("button", { name: "棉质短袖 T 恤", exact: true }).click();
+  await page.getByRole("checkbox", { name: "适用国补（手动）", exact: true }).uncheck();
+  await page.getByRole("button", { name: "保存商品", exact: true }).click();
+  await page.getByRole("button", { name: "结算", exact: true }).click();
+  await expect(page.locator(".total")).toContainText("413.00");
+});

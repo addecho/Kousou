@@ -1,0 +1,24 @@
+{
+  "name": "kousou",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "setup": "tsx scripts/setup.ts",
+    "dev": "tsx apps/server/src/index.ts",
+    "build": "pnpm --filter @kousou/web build",
+    "start": "tsx apps/server/src/index.ts",
+    "db:migrate": "tsx apps/server/src/migrate.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit && pnpm --filter @kousou/web typecheck",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "@types/node": "^24.0.0",
+    "fast-check": "^4.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
